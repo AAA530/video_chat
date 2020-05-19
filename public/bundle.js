@@ -8179,8 +8179,8 @@ username = prompt("username", "Harry Potter");
 room = prompt("room", "test");
 socket.emit("join-chat", { username, room });
 socket.on("output", (data) => {
-	console.log(data)
-})
+	console.log(data);
+});
 
 //get stream
 navigator.mediaDevices
@@ -8189,9 +8189,8 @@ navigator.mediaDevices
 		socket.emit("NewClient");
 		video.srcObject = stream;
 		video.play();
-
 		function InitPeer(type) {
-			console.log("INIT")
+			console.log("INIT");
 			let peer = new Peer({
 				initiator: type == "init" ? true : false,
 				stream: stream,
@@ -8202,7 +8201,7 @@ navigator.mediaDevices
 				console.log("wrong");
 				CreateVideo(stream);
 			});
-			return peer
+			return peer;
 		}
 
 		//for peer of type init
@@ -8229,32 +8228,41 @@ navigator.mediaDevices
 
 		function SignalAnswer(answer) {
 			console.log("Signaml absw");
-			client.gotAnswer = true
-			let peer = client.peer
-			peer.signal(answer)
+			client.gotAnswer = true;
+			let peer = client.peer;
+			peer.signal(answer);
 		}
 
 		function CreateVideo(stream) {
 			console.log("Create video");
-			let video = document.createElement('video')
-			video.id = 'peerVideo'
-			video.srcObject = stream
+			let video = document.createElement("video");
+			video.id = "peerVideo";
+			video.srcObject = stream;
 			video.className = "embed-responsive-item";
-			document.querySelector('#peerDiv').appendChild(video)
-			video.play()
+			document.querySelector("#peerDiv").appendChild(video);
+			video.play();
 		}
 
 		function SessionActive() {
-			document.write('session active')
+			document.write("session active");
 		}
 
-		socket.on('BackOffer', FrontAnswer)
+		function RemovePeer() {
+			const a = document.getElementById("peerVideo")
+			console.log(a.parentElement)
+			a.remove()
+			if (client.peer) {
+				client.peer.destroy();
+			}
+		}
+
+		socket.on("BackOffer", FrontAnswer);
 		socket.on("BackAnswer", SignalAnswer);
 		socket.on("SessionActive", SessionActive);
 		socket.on("CreatePeer", MakePeer);
-
-
+		socket.on("Disconnect", RemovePeer);
 	})
 	.catch((err) => console.log(err));
+
 
 },{"simple-peer":27}]},{},[34]);

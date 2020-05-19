@@ -21,6 +21,7 @@ function getUser(id) {
 }
 
 function userLeave(id) {
+	console.log([users])
 	const index = users.findIndex((user) => user.id === id);
 	if (index !== -1) {
 		return users.splice(index, 1)[0];
@@ -39,22 +40,22 @@ io.on("connection", function (socket) {
 
 		//when user connects
 		socket.broadcast.to(room).emit("output", username + "joined");
-	});
 
-	socket.on("NewClient", () => {
-		const user = getUser(socket.id);
-		let clients = Object.keys(getUserRoom(user.room)).length;
-		console.log(clients);
-		Object.keys(getUserRoom("test")).length;
+		socket.on("NewClient", () => {
+			const user = getUser(socket.id);
+			let clients = Object.keys(getUserRoom(user.room)).length;
+			console.log(clients);
+			Object.keys(getUserRoom("test")).length;
 
-		//if we send room name here
-		if (clients < 3) {
-			this.emit("CreatePeer");
-		} else this.emit("SessionActive");
+			//if we send room name here
+			if (clients < 3) {
+				this.emit("CreatePeer");
+			} else this.emit("SessionActive");
+		});
+		socket.on("Offer", SendOffer);
+		socket.on("Answer", SendAnswer);
+		socket.on("disconnect", Disconnect);
 	});
-	socket.on("Offer", SendOffer);
-	socket.on("Answer", SendAnswer);
-	socket.on("disconnect", Disconnect);
 });
 
 function Disconnect() {
