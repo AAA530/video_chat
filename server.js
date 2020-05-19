@@ -59,7 +59,6 @@ io.on("connection", function (socket) {
 
 function Disconnect() {
 	userLeave(this.id);
-	room = user.room;
 	this.broadcast.to(room).emit("Disconnect");
 }
 
