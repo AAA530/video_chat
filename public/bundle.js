@@ -8175,6 +8175,13 @@ let socket = io();
 const video = document.querySelector("video");
 let client = {};
 
+username = prompt("username", "Harry Potter");
+room = prompt("room", "test");
+socket.emit("join-chat", { username, room });
+socket.on("output", (data) => {
+	console.log(data)
+})
+
 //get stream
 navigator.mediaDevices
 	.getUserMedia({ video: true, audio: true })
@@ -8194,9 +8201,8 @@ navigator.mediaDevices
 			peer.on("stream", (stream) => {
 				console.log("wrong");
 				CreateVideo(stream);
-      });
-      
-      return peer
+			});
+			return peer
 		}
 
 		//for peer of type init

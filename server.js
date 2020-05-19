@@ -5,10 +5,28 @@ const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + "/public"));
-let clients = 0
+let clients = 0;
+const users = [];
+
+
+function userJoin(id, username, room) {
+	const user = { id, username, room };
+
+	users.push(user);
+	return user;
+}
 
 io.on("connection", function (socket) {
-	socket.on("NewClient", function () {
+	socket.on("join-chat", ({ username, room }) => {
+		socket.join(room);
+		// socket.emit("output", username + "joined");
+
+		//when user connects
+		socket.broadcast.to(room).emit("output", username + "joined");
+	});
+
+	socket.on("NewClient", () => {
+		//if we send room name here
 		if (clients < 2) {
 			if (clients == 1) {
 				this.emit("CreatePeer");
@@ -35,6 +53,5 @@ function SendOffer(offer) {
 function SendAnswer(data) {
 	this.broadcast.emit("BackAnswer", data);
 }
-
 
 http.listen(port, () => console.log(`Active on ${port} port`));
