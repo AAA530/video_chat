@@ -8,7 +8,6 @@ app.use(express.static(__dirname + "/public"));
 let clients = 0;
 const users = [];
 
-
 function userJoin(id, username, room) {
 	const user = { id, username, room };
 
@@ -16,9 +15,26 @@ function userJoin(id, username, room) {
 	return user;
 }
 
+//get current user
+function getUser(id) {
+	return users.find((user) => user.id === id);
+}
+
+function userLeave(id) {
+	const index = users.findIndex((user) => user.id === id);
+	if (index !== -1) {
+		return users.splice(index, 1)[0];
+	}
+}
+
+function getUserRoom(room) {
+	return users.filter((user) => user.room === room);
+}
+
 io.on("connection", function (socket) {
 	socket.on("join-chat", ({ username, room }) => {
 		socket.join(room);
+		const user = userJoin(socket.id, username, room);
 		// socket.emit("output", username + "joined");
 
 		//when user connects
@@ -26,13 +42,15 @@ io.on("connection", function (socket) {
 	});
 
 	socket.on("NewClient", () => {
+		const user = getUser(socket.id);
+		let clients = Object.keys(getUserRoom(user.room)).length;
+		console.log(clients);
+		Object.keys(getUserRoom("test")).length;
+
 		//if we send room name here
-		if (clients < 2) {
-			if (clients == 1) {
-				this.emit("CreatePeer");
-			}
+		if (clients < 3) {
+			this.emit("CreatePeer");
 		} else this.emit("SessionActive");
-		clients++;
 	});
 	socket.on("Offer", SendOffer);
 	socket.on("Answer", SendAnswer);
@@ -40,18 +58,21 @@ io.on("connection", function (socket) {
 });
 
 function Disconnect() {
-	if (clients > 0) {
-		if (clients <= 2) this.broadcast.emit("Disconnect");
-		clients--;
-	}
+	userLeave(this.id);
+	room = user.room;
+	this.broadcast.to(room).emit("Disconnect");
 }
 
 function SendOffer(offer) {
-	this.broadcast.emit("BackOffer", offer);
+	const user = getUser(this.id);
+	room = user.room;
+	this.broadcast.to(room).emit("BackOffer", offer);
 }
 
 function SendAnswer(data) {
-	this.broadcast.emit("BackAnswer", data);
+	const user = getUser(this.id);
+	room = user.room;
+	this.broadcast.to(room).emit("BackAnswer", data);
 }
 
 http.listen(port, () => console.log(`Active on ${port} port`));
