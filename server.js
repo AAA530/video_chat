@@ -5,6 +5,7 @@ const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + "/public"));
+app.set("view engine", "ejs");
 let clients = 0;
 const users = [];
 
@@ -21,7 +22,7 @@ function getUser(id) {
 }
 
 function userLeave(id) {
-	console.log([users])
+	console.log([users]);
 	const index = users.findIndex((user) => user.id === id);
 	if (index !== -1) {
 		return users.splice(index, 1)[0];
@@ -74,5 +75,9 @@ function SendAnswer(data) {
 	room = user.room;
 	this.broadcast.to(room).emit("BackAnswer", data);
 }
+
+app.get("/video", (req, res) => {
+	res.render("video.ejs");
+});
 
 http.listen(port, () => console.log(`Active on ${port} port`));
