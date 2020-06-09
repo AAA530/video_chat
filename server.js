@@ -76,7 +76,13 @@ function SendAnswer(data) {
 	this.broadcast.to(room).emit("BackAnswer", data);
 }
 
-app.get("/video", (req, res) => {
+app.get('/', (req, res) => {
+	res.render('home.ejs')
+});
+
+
+app.post("/video", (req, res) => {
+	console.log(req.body);
 	res.render("video.ejs");
 });
 
