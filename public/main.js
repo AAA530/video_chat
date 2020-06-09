@@ -3,8 +3,12 @@ let socket = io();
 const video = document.querySelector("video");
 let client = {};
 
-username = prompt("username", "Harry Potter");
-room = prompt("room", "test");
+// username = prompt("username", "Harry Potter");
+// room = prompt("room", "test");
+
+console.log(username)
+console.log(room)
+
 socket.emit("join-chat", { username, room });
 socket.on("output", (data) => {
 	console.log(data);
