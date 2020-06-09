@@ -1,8 +1,14 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const port = process.env.PORT || 3000;
+
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -82,8 +88,11 @@ app.get('/', (req, res) => {
 
 
 app.post("/video", (req, res) => {
-	console.log(req.body);
-	res.render("video.ejs");
+	console.log(req.body.username);
+	res.render("video.ejs", {
+		username: req.body.username,
+		room: req.body.room,
+	});
 });
 
 http.listen(port, () => console.log(`Active on ${port} port`));

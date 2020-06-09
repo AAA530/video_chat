@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/AAA530/video_chat#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "ejs": "^3.1.3",
     "express": "^4.17.1",
     "simple-peer": "^9.7.2",
