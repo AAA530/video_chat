@@ -11,91 +11,8 @@
 			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
 			crossorigin="anonymous"
 		/>
-
-		<style>
-			#videoCall {
-				width: 800px;
-				height: 420px;
-				position: relative;
-				border: solid 1px #000;
-				margin: 50px auto;
-				background-color: rgba(0, 0, 0, 0.3);
-				overflow: hidden;
-			}
-			#videoCall .contact-name {
-				position: absolute;
-				top: 0;
-				margin-left: 15px;
-				color: #f5f5f5;
-				text-shadow: 0 1px rgba(0, 0, 0, 0.7);
-			}
-			#videoCall .remote-stream {
-				width: 100%;
-				height: 100%;
-				background: rgba(3, 33, 52, 0.7);
-				z-index: -1;
-			}
-			#videoCall .local-stream {
-				width: 25%;
-				height: 25%;
-				position: absolute;
-				z-index: 1000;
-				background: #fff;
-				border: solid 1px rgba(0, 0, 0, 0.3);
-				bottom: 0;
-				left: 40%;
-			}
-			#videoCall .controls {
-				position: absolute;
-				bottom: 0;
-				right: 0;
-				margin-right: 20px;
-				margin-bottom: 10px;
-			}
-			#videoCall .controls button {
-				border: 0 none;
-				padding: 10px 12px;
-				border-radius: 50%;
-				background-color: #f00;
-			}
-			#videoCall .controls button i {
-				color: #f5f5f5;
-			}
-			.material-icons.md-18 {
-				font-size: 18px;
-			}
-			.material-icons.md-24 {
-				font-size: 24px;
-			}
-			.material-icons.md-36 {
-				font-size: 36px;
-			}
-			.material-icons.md-48 {
-				font-size: 48px;
-			}
-		</style>
 	</head>
-	<body>
-
-
-
-
-
-    
-<div id="videoCall">
-  <div class="contact-name">
-    <h3>Partner Name</h3>
-  </div>
-  <video class="remote-stream">thier video</video>
-  <video class="local-stream">your video</video>
-  <div class="controls">
-    <button class="call-end"><i class="material-icons md-48">call_end</i></button>
-  </div>
-</div>
-
-
-
-
+	<body style="background-color: black;">
 		<h1>Video Chat</h1>
 
 		<div class="row">
@@ -106,7 +23,8 @@
 				></div>
 			</div>
 
-			<div class="col-md-6">
+			<div id="drag" style="position: absolute;width: 300px;background-color: gray;">
+        <div id="dragheader" style="padding: 10px;background-color: aqua;"></div>
 				<div class="embed-responsive embed-responsive-16by9">
 					<video class="embed-responsive-item" muted></video>
 				</div>
@@ -120,5 +38,55 @@
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="bundle.js"></script>
+		<script>
+			//Make the DIV element draggagle:
+			dragElement(document.getElementById("drag"));
+
+			function dragElement(elmnt) {
+				var pos1 = 0,
+					pos2 = 0,
+					pos3 = 0,
+					pos4 = 0;
+				if (document.getElementById(elmnt.id + "header")) {
+					/* if present, the header is where you move the DIV from:*/
+					document.getElementById(
+						elmnt.id + "header"
+					).onmousedown = dragMouseDown;
+				} else {
+					/* otherwise, move the DIV from anywhere inside the DIV:*/
+					elmnt.onmousedown = dragMouseDown;
+				}
+
+				function dragMouseDown(e) {
+					e = e || window.event;
+					e.preventDefault();
+					// get the mouse cursor position at startup:
+					pos3 = e.clientX;
+					pos4 = e.clientY;
+					document.onmouseup = closeDragElement;
+					// call a function whenever the cursor moves:
+					document.onmousemove = elementDrag;
+				}
+
+				function elementDrag(e) {
+					e = e || window.event;
+					e.preventDefault();
+					// calculate the new cursor position:
+					pos1 = pos3 - e.clientX;
+					pos2 = pos4 - e.clientY;
+					pos3 = e.clientX;
+					pos4 = e.clientY;
+					// set the element's new position:
+					elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+					elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+				}
+
+				function closeDragElement() {
+					/* stop moving when mouse button is released:*/
+					document.onmouseup = null;
+					document.onmousemove = null;
+				}
+			}
+		</script>
 	</body>
 </html>
