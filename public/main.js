@@ -73,6 +73,7 @@ navigator.mediaDevices
 			video.className = "embed-responsive-item";
 			document.querySelector("#peerDiv").appendChild(video);
 			video.play();
+			removeHeading();
 		}
 
 		function SessionActive() {
@@ -96,3 +97,8 @@ navigator.mediaDevices
 	})
 	.catch((err) => console.log(err));
 
+
+function removeHeading(){
+	const head = document.getElementById("heading")
+	head.remove()
+	}

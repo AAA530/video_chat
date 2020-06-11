@@ -13,22 +13,33 @@
 		/>
 	</head>
 	<body style="background-color: black;">
-		<h1>Video Chat</h1>
+		<h1 class="text-center" id="heading">
+			Video will begin as soon as other person connects
+		</h1>
 
-		<div class="row">
-			<div class="col-md-12">
-				<div
-					id="peerDiv"
-					class="embed-responsive embed-responsive-16by9"
-				></div>
+		<div
+			id="drag"
+			style="
+				position: absolute;
+				width: 300px;
+				background-color: gray;
+				z-index: 99;
+			"
+		>
+			<div
+				id="dragheader"
+				style="padding: 10px; background-color: aqua;"
+			></div>
+			<div class="embed-responsive embed-responsive-16by9">
+				<video class="embed-responsive-item" muted></video>
 			</div>
+		</div>
 
-			<div id="drag" style="position: absolute;width: 300px;background-color: gray;">
-        <div id="dragheader" style="padding: 10px;background-color: aqua;"></div>
-				<div class="embed-responsive embed-responsive-16by9">
-					<video class="embed-responsive-item" muted></video>
-				</div>
-			</div>
+		<div style="width: 100%; height: 90%;">
+			<div
+				id="peerDiv"
+				class="embed-responsive embed-responsive-16by9"
+			></div>
 		</div>
 
 		<script>
