@@ -1,0 +1,15 @@
+body {
+	background-color: black;
+}
+
+.dragdiv {
+	position: absolute;
+	width: 300px;
+	background-color: gray;
+	z-index: 99;
+}
+
+.dragMeDiv {
+	padding: 10px;
+	background-color: aqua;
+}
