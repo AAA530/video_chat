@@ -14,10 +14,17 @@ body {
 	background-color: aqua;
 }
 
-.dragMeDiv:hover{
-    cursor: -webkit-grab; cursor: grab;
+.dragMeDiv:hover {
+	cursor: -webkit-grab;
+	cursor: grab;
 }
 
-.dragMeDiv:active{
-    cursor: -webkit-grabbing; cursor: grabbing;
+.dragMeDiv:active {
+	cursor: -webkit-grabbing;
+	cursor: grabbing;
+}
+
+.otherVideo {
+	width: 100%;
+	height: 90%;
 }
