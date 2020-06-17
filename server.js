@@ -66,8 +66,13 @@ io.on("connection", function (socket) {
 });
 
 function Disconnect() {
-	userLeave(this.id);
-	this.broadcast.to(room).emit("Disconnect");
+	try {
+		userLeave(this.id);
+		this.broadcast.to(room).emit("Disconnect");
+	} catch (err) {
+		console.log(err)
+	}
+	
 }
 
 function SendOffer(offer) {
