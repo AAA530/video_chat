@@ -96,7 +96,10 @@ if (navigator.mediaDevices) {
 			socket.on("CreatePeer", MakePeer);
 			socket.on("Disconnect", RemovePeer);
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log(err)
+			alert(err)
+		});
 }
 else {
 	alert("Not able to get Your video")
