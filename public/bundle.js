@@ -8181,8 +8181,8 @@ let client = {};
 console.log(username);
 console.log(room);
 
-socket.emit("join-chat", { username, room });
-socket.on("output", (data) => {
+socket.emit("join-video-chat", { username, room });
+socket.on("output_video", (data) => {
 	console.log(data);
 });
 

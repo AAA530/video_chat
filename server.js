@@ -3,50 +3,47 @@ const app = express();
 const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
-
-
+const port = process.env.PORT || 4000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 let clients = 0;
-const users = [];
+const users_video = [];
 
 function userJoin(id, username, room) {
 	const user = { id, username, room };
 
-	users.push(user);
+	users_video.push(user);
 	return user;
 }
 
 //get current user
 function getUser(id) {
-	return users.find((user) => user.id === id);
+	return users_video.find((user) => user.id === id);
 }
 
 function userLeave(id) {
-	console.log([users]);
-	const index = users.findIndex((user) => user.id === id);
+	console.log([users_video]);
+	const index = users_video.findIndex((user) => user.id === id);
 	if (index !== -1) {
-		return users.splice(index, 1)[0];
+		return users_video.splice(index, 1)[0];
 	}
 }
 
 function getUserRoom(room) {
-	return users.filter((user) => user.room === room);
+	return users_video.filter((user) => user.room === room);
 }
 
 io.on("connection", function (socket) {
-	socket.on("join-chat", ({ username, room }) => {
+	socket.on("join-video-chat", ({ username, room }) => {
 		socket.join(room);
 		const user = userJoin(socket.id, username, room);
 		// socket.emit("output", username + "joined");
 
 		//when user connects
-		socket.broadcast.to(room).emit("output", username + "joined");
+		socket.broadcast.to(room).emit("output_video", username + "joined");
 
 		socket.on("NewClient", () => {
 			const user = getUser(socket.id);
@@ -70,9 +67,8 @@ function Disconnect() {
 		userLeave(this.id);
 		this.broadcast.to(room).emit("Disconnect");
 	} catch (err) {
-		console.log(err)
+		console.log(err);
 	}
-	
 }
 
 function SendOffer(offer) {
@@ -87,10 +83,9 @@ function SendAnswer(data) {
 	this.broadcast.to(room).emit("BackAnswer", data);
 }
 
-app.get('/', (req, res) => {
-	res.render('home.ejs')
+app.get("/", (req, res) => {
+	res.render("home.ejs");
 });
-
 
 app.post("/video", (req, res) => {
 	console.log(req.body.username);
